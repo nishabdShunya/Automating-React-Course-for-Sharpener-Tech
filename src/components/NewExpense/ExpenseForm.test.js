@@ -24,4 +24,44 @@ describe("ExpenseForm", () => {
     fireEvent.change(dateInput, { target: { value: "2023-11-01" } }); // Simulate user input
     expect(dateInput.value).toBe("2023-11-01"); // Verify if the input value is set correctly
   });
+
+  test("form submission calls the submit handler", () => {
+    const submitHandler = jest.fn();
+    render(<ExpenseForm />);
+    const addButton = screen.getByText("Add Expense");
+    addButton.onclick = submitHandler;
+
+    const titleInput = screen.getByLabelText("Title");
+    const amountInput = screen.getByLabelText("Amount");
+    const dateInput = screen.getByLabelText("Date");
+
+    fireEvent.change(titleInput, { target: { value: "Test Title" } });
+    fireEvent.change(amountInput, { target: { value: "100" } });
+    fireEvent.change(dateInput, { target: { value: "2023-11-02" } });
+    fireEvent.click(addButton);
+
+    expect(submitHandler).toHaveBeenCalledTimes(1);
+  });
+
+  test("form submission clears input fields", () => {
+    const submitHandler = jest.fn();
+    render(<ExpenseForm />);
+    const addButton = screen.getByText("Add Expense");
+    addButton.onclick = submitHandler;
+
+    const titleInput = screen.getByLabelText("Title");
+    const amountInput = screen.getByLabelText("Amount");
+    const dateInput = screen.getByLabelText("Date");
+
+    fireEvent.change(titleInput, { target: { value: "Test Title" } });
+    fireEvent.change(amountInput, { target: { value: "100" } });
+    fireEvent.change(dateInput, { target: { value: "2023-11-02" } });
+    fireEvent.click(addButton);
+
+    expect(submitHandler).toHaveBeenCalledTimes(1);
+
+    expect(titleInput.value).toBe("");
+    expect(amountInput.value).toBe("");
+    expect(dateInput.value).toBe("");
+  });
 });
