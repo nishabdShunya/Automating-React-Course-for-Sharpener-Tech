@@ -6,37 +6,31 @@ import "@testing-library/jest-dom/extend-expect";
 import ExpenseItem from "./ExpenseItem";
 
 describe("ExpenseItem Component", () => {
-  test("has a div for location of expense rendered correctly via props object", () => {
+  test("includes ExpenseDate Component", () => {
     const title = "Test Title";
     const date = new Date(2023, 0, 1);
     const price = "50";
-    const location = "London";
-    render(
-      <ExpenseItem
-        title={title}
-        date={date}
-        price={price}
-        location={location}
-      />
-    );
-    const locationElement = screen.getByText(location);
-    expect(locationElement).toBeInTheDocument();
+    render(<ExpenseItem title={title} date={date} price={price} />);
+    expect(screen.getByText("January")).toBeInTheDocument();
+    expect(screen.getByText("2023")).toBeInTheDocument();
+    expect(screen.getByText("1")).toBeInTheDocument();
   });
 
-  test("applies 'expense-item__location' class to div for location of expense", () => {
+  test("is rendered correctly with title prop", () => {
     const title = "Test Title";
     const date = new Date(2023, 0, 1);
     const price = "50";
-    const location = "London";
-    const { container } = render(
-      <ExpenseItem
-        title={title}
-        date={date}
-        price={price}
-        location={location}
-      />
-    );
-    const locationElement = container.querySelector(".expense-item__location");
-    expect(locationElement).toBeInTheDocument();
+    render(<ExpenseItem title={title} date={date} price={price} />);
+    const titleElement = screen.getByText(title);
+    expect(titleElement).toBeInTheDocument();
+  });
+
+  test("is rendered correctly with price prop", () => {
+    const title = "Test Title";
+    const date = new Date(2023, 0, 1);
+    const price = "50";
+    render(<ExpenseItem title={title} date={date} price={price} />);
+    const priceElement = screen.getByText("$" + price);
+    expect(priceElement).toBeInTheDocument();
   });
 });
