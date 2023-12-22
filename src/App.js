@@ -1,5 +1,3 @@
-// Write your code at relevant places in the code below:
-
 import React from "react";
 import Expenses from "./components/Expenses/Expenses";
 import NewExpense from "./components/NewExpense/NewExpense";
@@ -12,9 +10,13 @@ const App = () => {
     { id: 4, title: "Laptop", date: new Date(2023, 9, 17), price: 200 },
   ];
 
+  const addExpenseHandler = (expense) => {
+    console.log(expense);
+  };
+
   return (
     <div>
-      <NewExpense />
+      <NewExpense onAddExpense={addExpenseHandler} />
       <Expenses expenses={expenses} />
     </div>
   );
