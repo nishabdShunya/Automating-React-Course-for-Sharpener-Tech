@@ -3,36 +3,26 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import App from "./App";
 
-describe("App component", () => {
-  test("logs to console the expense data received from ExpenseForm component via NewExpense component", () => {
-    const originalConsoleLog = console.log;
-    console.log = jest.fn(); // Mock console.log
+test("Form submission adds new expense to the expenses list", () => {
+  render(<App />);
 
-    render(<App />);
+  // Find the input fields and buttons
+  const titleInput = screen.getByLabelText("Title");
+  const amountInput = screen.getByLabelText("Amount");
+  const dateInput = screen.getByLabelText("Date");
+  const addButton = screen.getByText("Add Expense");
 
-    // Simulate user input in the ExpenseForm component
-    fireEvent.change(screen.getByLabelText("Title"), {
-      target: { value: "Test Title" },
-    });
-    fireEvent.change(screen.getByLabelText("Amount"), {
-      target: { value: "100" },
-    });
-    fireEvent.change(screen.getByLabelText("Date"), {
-      target: { value: "2023-11-02" },
-    });
+  // Enter values into the input fields
+  fireEvent.change(titleInput, { target: { value: "Groceries" } });
+  fireEvent.change(amountInput, { target: { value: "50" } });
+  fireEvent.change(dateInput, { target: { value: "2023-12-24" } });
 
-    // Simulate form submission
-    fireEvent.click(screen.getByText("Add Expense"));
+  // Click the add button
+  fireEvent.click(addButton);
 
-    // Check if the console.log is called with the correct data
-    expect(console.log).toHaveBeenCalledWith({
-      title: "Test Title",
-      amount: "100",
-      date: new Date("2023-11-02"),
-      id: expect.any(String),
-    });
-
-    // Restore the original console.log
-    console.log = originalConsoleLog;
-  });
+  // Check if the new expense is added to the list
+  expect(screen.getByText("Groceries")).toBeInTheDocument();
+  expect(screen.getByText("$50")).toBeInTheDocument();
+  expect(screen.getByText("December")).toBeInTheDocument();
+  expect(screen.getByText("24")).toBeInTheDocument();
 });
