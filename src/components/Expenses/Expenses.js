@@ -22,12 +22,17 @@ const Expenses = (props) => {
   if (filteredExpenses.length > 0) {
     expensesContent = filteredExpenses.map((expense) => {
       return (
-        <ExpenseItem
-          key={expense.id}
-          title={expense.title}
-          date={expense.date}
-          price={expense.price}
-        />
+        <>
+          <ExpenseItem
+            key={expense.id}
+            title={expense.title}
+            date={expense.date}
+            price={expense.price}
+          />
+          {filteredExpenses.length === 1 && (
+            <p>Only one expense found. Please add more</p>
+          )}
+        </>
       );
     });
   }
